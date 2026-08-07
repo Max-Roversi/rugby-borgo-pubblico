@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rugby Borgo — Pagine pubbliche</title>
+<style>
+  :root {
+    --bg: #f5f3ec;
+    --ink: #1c211d;
+    --ink-soft: #5b655e;
+    --turf: #2f6b45;
+    --line: #ddd7c7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #101f16; --ink: #edf1ea; --ink-soft: #a9b6ab; --turf: #74c493; --line: #24402f; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+  }
+  main { width: 100%; max-width: 560px; padding: 32px 20px; }
+  h1 { font-size: 22px; font-weight: 800; margin: 0 0 4px; }
+  p.sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 24px; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  a.card {
+    display: block;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--turf);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  a.card small { display: block; color: var(--ink-soft); font-weight: 400; font-size: 12.5px; margin-top: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Rugby Borgo — Pagine pubbliche</h1>
+  <p class="sub">Calendari e strumenti condivisibili.</p>
+  <ul>
+    <li><a class="card" href="calendario-serie-b-2026-27.html">Calendario Serie B 2026/27
+      <small>Girone 2, filtro per giornata</small>
+    </a></li>
+  </ul>
+</main>
+</body>
+</html>

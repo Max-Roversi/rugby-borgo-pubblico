@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calendario Rugby Borgo — Serie B 2026/27</title>
+<style>
+  :root {
+    --bg: #f5f3ec;
+    --bg-elev: #ffffff;
+    --bg-sunk: #ece8db;
+    --ink: #1c211d;
+    --ink-soft: #5b655e;
+    --ink-faint: #8b9188;
+    --turf: #2f6b45;
+    --turf-strong: #1f4f33;
+    --turf-tint: #e3ede3;
+    --gold: #a9701b;
+    --gold-tint: #f4e6cd;
+    --line: #ddd7c7;
+    --shadow: 0 1px 2px rgba(28, 33, 29, 0.06), 0 6px 16px -8px rgba(28, 33, 29, 0.18);
+    --radius: 14px;
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101f16;
+      --bg-elev: #16281c;
+      --bg-sunk: #0c1710;
+      --ink: #edf1ea;
+      --ink-soft: #a9b6ab;
+      --ink-faint: #728174;
+      --turf: #74c493;
+      --turf-strong: #8fd6ac;
+      --turf-tint: #1c3526;
+      --gold: #e3ab5c;
+      --gold-tint: #3a2c14;
+      --line: #24402f;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #101f16;
+    --bg-elev: #16281c;
+    --bg-sunk: #0c1710;
+    --ink: #edf1ea;
+    --ink-soft: #a9b6ab;
+    --ink-faint: #728174;
+    --turf: #74c493;
+    --turf-strong: #8fd6ac;
+    --turf-tint: #1c3526;
+    --gold: #e3ab5c;
+    --gold-tint: #3a2c14;
+    --line: #24402f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  :root[data-theme="light"] {
+    --bg: #f5f3ec;
+    --bg-elev: #ffffff;
+    --bg-sunk: #ece8db;
+    --ink: #1c211d;
+    --ink-soft: #5b655e;
+    --ink-faint: #8b9188;
+    --turf: #2f6b45;
+    --turf-strong: #1f4f33;
+    --turf-tint: #e3ede3;
+    --gold: #a9701b;
+    --gold-tint: #f4e6cd;
+    --line: #ddd7c7;
+    --shadow: 0 1px 2px rgba(28, 33, 29, 0.06), 0 6px 16px -8px rgba(28, 33, 29, 0.18);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: -apple-system, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .app {
+    max-width: 560px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---- Header ---- */
+  .head {
+    padding: calc(18px + var(--safe-t)) 18px 14px;
+    background: linear-gradient(180deg, var(--turf-strong), var(--turf));
+    color: #f7fbf8;
+  }
+  .head__eyebrow {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    opacity: 0.82;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .head__eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.6; }
+  .head__title {
+    margin: 4px 0 0;
+    font-size: 24px;
+    font-weight: 800;
+    font-stretch: condensed;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .head__sub {
+    margin: 3px 0 0;
+    font-size: 13px;
+    color: rgba(247, 251, 248, 0.78);
+  }
+
+  /* ---- Tabs ---- */
+  .tabs {
+    margin: 14px 18px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(0, 0, 0, 0.16);
+    border-radius: 11px;
+    padding: 3px;
+    gap: 3px;
+  }
+  .tab {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(247, 251, 248, 0.75);
+    font: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 9px 6px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .tab[aria-selected="true"] {
+    background: var(--bg-elev);
+    color: var(--turf-strong);
+    box-shadow: var(--shadow);
+  }
+
+  /* ---- Sticky filter bar ---- */
+  .filterbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 0 10px;
+  }
+  .chiprow {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 0 18px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .chiprow::-webkit-scrollbar { display: none; }
+  .chip {
+    appearance: none;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    border: 1px solid var(--line);
+    background: var(--bg-elev);
+    color: var(--ink-soft);
+    font: inherit;
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    padding: 7px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.15;
+    min-height: 44px;
+    justify-content: center;
+  }
+  .chip small {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--turf);
+    border-color: var(--turf);
+    color: #f7fbf8;
+  }
+  .chip[aria-pressed="true"] small { color: rgba(247, 251, 248, 0.75); }
+  .chip:focus-visible { outline: 2px solid var(--turf-strong); outline-offset: 2px; }
+
+  /* ---- Stat strip ---- */
+  .statline {
+    padding: 12px 18px 2px;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .statline strong { color: var(--ink-soft); font-weight: 700; }
+  .statline .split { display: flex; gap: 10px; }
+  .statline .split b { color: var(--turf-strong); font-variant-numeric: tabular-nums; }
+  .statline .split .away b { color: var(--ink-soft); }
+
+  /* ---- List ---- */
+  .list {
+    flex: 1;
+    padding: 8px 18px calc(28px + var(--safe-b));
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .group-head {
+    margin-top: 10px;
+    padding: 2px 2px 0;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--turf-strong);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .group-head::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .card {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px 13px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .card.is-home { border-left-color: var(--gold); }
+
+  .card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  .card__meta .when { font-variant-numeric: tabular-nums; }
+  .badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--gold);
+    background: var(--gold-tint);
+    padding: 3px 7px;
+    border-radius: 999px;
+  }
+
+  .card__match {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 15.5px;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+  .card__match .sep { color: var(--ink-faint); font-weight: 400; }
+  .card__match .fiu { color: var(--turf-strong); }
+
+  .card__foot {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card__foot svg { width: 12px; height: 12px; flex: none; opacity: 0.7; }
+
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--ink-faint);
+    font-size: 13.5px;
+  }
+
+  .foot-note {
+    padding: 4px 18px calc(20px + var(--safe-b));
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { transition: transform 120ms ease; }
+    .chip { transition: background 120ms ease, color 120ms ease; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <div class="head">
+    <div class="head__eyebrow">Rugby Borgo <span class="dot"></span> ASD Rugby Fiumicello</div>
+    <h1 class="head__title">Calendario Serie B 2026/27</h1>
+    <p class="head__sub">Girone 2 &middot; Federazione Italiana Rugby</p>
+    <div class="tabs" role="tablist" aria-label="Vista calendario">
+      <button class="tab" id="tab-fiu" role="tab" aria-selected="true">Solo Fiumicello</button>
+      <button class="tab" id="tab-g2" role="tab" aria-selected="false">Girone 2 completo</button>
+    </div>
+  </div>
+
+  <div class="filterbar">
+    <div class="chiprow" id="chiprow" role="tablist" aria-label="Filtro giornata"></div>
+  </div>
+
+  <div class="statline" id="statline"></div>
+
+  <div class="list" id="list"></div>
+
+  <p class="foot-note">Fonte: F.I.R. &middot; Commissione Organizzatrice &middot; stampa 7/08/2026</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var MONTHS = ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
+  var WEEKDAYS = ["dom","lun","mar","mer","gio","ven","sab"];
+
+  function parseDate(d) {
+    var p = d.split("/");
+    return new Date(parseInt(p[2], 10), parseInt(p[1], 10) - 1, parseInt(p[0], 10));
+  }
+  function fmtShort(d) {
+    var dt = parseDate(d);
+    return dt.getDate() + " " + MONTHS[dt.getMonth()];
+  }
+  function fmtFull(d) {
+    var dt = parseDate(d);
+    return WEEKDAYS[dt.getDay()] + " " + dt.getDate() + " " + MONTHS[dt.getMonth()] + " " + dt.getFullYear();
+  }
+
+  // Girone 2 completo — 1a Fase Andata + Ritorno, Stagione 2026/27
+  // ciascun match: [casa, ospite, ora, sede]
+  var GIORNATE = [
+    { round: "A", n: 1, date: "18/10/2026", m: [
+      ["Valorugby Emilia","Oltremella","15:30","Reggio Emilia"],
+      ["Villadose 76","Fiumicello","15:30","Villadose (RO)"],
+      ["Carpi","Casalmaggiore","15:30","Carpi (MO)"],
+      ["Bassa Bresciana Leno","Lyons","15:30","Leno (BS)"],
+      ["Parma","Rovato","15:30","Parma"] ] },
+    { round: "A", n: 2, date: "25/10/2026", m: [
+      ["Rovato","Valorugby Emilia","14:30","Rovato (BS)"],
+      ["Oltremella","Villadose 76","14:30","Roncadelle (BS)"],
+      ["Lyons","Carpi","14:30","Piacenza"],
+      ["Casalmaggiore","Bassa Bresciana Leno","14:30","Casalbellotto (CR)"],
+      ["Fiumicello","Parma","14:30","Brescia"] ] },
+    { round: "A", n: 3, date: "08/11/2026", m: [
+      ["Bassa Bresciana Leno","Valorugby Emilia","14:30","Leno (BS)"],
+      ["Villadose 76","Rovato","14:30","Villadose (RO)"],
+      ["Carpi","Oltremella","14:30","Carpi (MO)"],
+      ["Lyons","Fiumicello","14:30","Piacenza"],
+      ["Parma","Casalmaggiore","14:30","Parma"] ] },
+    { round: "A", n: 4, date: "15/11/2026", m: [
+      ["Valorugby Emilia","Parma","14:30","Reggio Emilia"],
+      ["Casalmaggiore","Villadose 76","14:30","Casalbellotto (CR)"],
+      ["Fiumicello","Carpi","14:30","Brescia"],
+      ["Rovato","Bassa Bresciana Leno","14:30","Rovato (BS)"],
+      ["Oltremella","Lyons","14:30","Roncadelle (BS)"] ] },
+    { round: "A", n: 5, date: "29/11/2026", m: [
+      ["Villadose 76","Valorugby Emilia","14:30","Villadose (RO)"],
+      ["Carpi","Rovato","14:30","Carpi (MO)"],
+      ["Parma","Bassa Bresciana Leno","14:30","Parma"],
+      ["Oltremella","Fiumicello","14:30","Roncadelle (BS)"],
+      ["Lyons","Casalmaggiore","14:30","Piacenza"] ] },
+    { round: "A", n: 6, date: "06/12/2026", m: [
+      ["Valorugby Emilia","Carpi","14:30","Reggio Emilia"],
+      ["Bassa Bresciana Leno","Villadose 76","14:30","Leno (BS)"],
+      ["Casalmaggiore","Fiumicello","14:30","Casalbellotto (CR)"],
+      ["Parma","Oltremella","12:30","Parma"],
+      ["Rovato","Lyons","14:30","Rovato (BS)"] ] },
+    { round: "A", n: 7, date: "13/12/2026", m: [
+      ["Lyons","Valorugby Emilia","14:30","Piacenza"],
+      ["Villadose 76","Parma","14:30","Villadose (RO)"],
+      ["Carpi","Bassa Bresciana Leno","14:30","Carpi (MO)"],
+      ["Fiumicello","Rovato","14:30","Brescia"],
+      ["Oltremella","Casalmaggiore","14:30","Roncadelle (BS)"] ] },
+    { round: "A", n: 8, date: "17/01/2027", m: [
+      ["Valorugby Emilia","Fiumicello","14:30","Reggio Emilia"],
+      ["Villadose 76","Lyons","14:30","Villadose (RO)"],
+      ["Parma","Carpi","14:30","Parma"],
+      ["Bassa Bresciana Leno","Oltremella","14:30","Leno (BS)"],
+      ["Rovato","Casalmaggiore","14:30","Rovato (BS)"] ] },
+    { round: "A", n: 9, date: "24/01/2027", m: [
+      ["Casalmaggiore","Valorugby Emilia","14:30","Casalbellotto (CR)"],
+      ["Carpi","Villadose 76","14:30","Carpi (MO)"],
+      ["Fiumicello","Bassa Bresciana Leno","14:30","Brescia"],
+      ["Lyons","Parma","14:30","Piacenza"],
+      ["Oltremella","Rovato","14:30","Roncadelle (BS)"] ] },
+    { round: "R", n: 1, date: "31/01/2027", m: [
+      ["Oltremella","Valorugby Emilia","14:30","Roncadelle (BS)"],
+      ["Fiumicello","Villadose 76","14:30","Brescia"],
+      ["Casalmaggiore","Carpi","14:30","Casalbellotto (CR)"],
+      ["Lyons","Bassa Bresciana Leno","14:30","Piacenza"],
+      ["Rovato","Parma","14:30","Rovato (BS)"] ] },
+    { round: "R", n: 2, date: "21/02/2027", m: [
+      ["Valorugby Emilia","Rovato","14:30","Reggio Emilia"],
+      ["Villadose 76","Oltremella","14:30","Villadose (RO)"],
+      ["Carpi","Lyons","14:30","Carpi (MO)"],
+      ["Bassa Bresciana Leno","Casalmaggiore","14:30","Leno (BS)"],
+      ["Parma","Fiumicello","12:30","Parma"] ] },
+    { round: "R", n: 3, date: "28/02/2027", m: [
+      ["Valorugby Emilia","Bassa Bresciana Leno","14:30","Reggio Emilia"],
+      ["Rovato","Villadose 76","14:30","Rovato (BS)"],
+      ["Oltremella","Carpi","14:30","Roncadelle (BS)"],
+      ["Fiumicello","Lyons","14:30","Brescia"],
+      ["Casalmaggiore","Parma","14:30","Casalbellotto (CR)"] ] },
+    { round: "R", n: 4, date: "21/03/2027", m: [
+      ["Parma","Valorugby Emilia","12:30","Parma"],
+      ["Villadose 76","Casalmaggiore","14:30","Villadose (RO)"],
+      ["Carpi","Fiumicello","14:30","Carpi (MO)"],
+      ["Bassa Bresciana Leno","Rovato","14:30","Leno (BS)"],
+      ["Lyons","Oltremella","14:30","Piacenza"] ] },
+    { round: "R", n: 5, date: "04/04/2027", m: [
+      ["Valorugby Emilia","Villadose 76","15:30","Reggio Emilia"],
+      ["Rovato","Carpi","15:30","Rovato (BS)"],
+      ["Bassa Bresciana Leno","Parma","15:30","Leno (BS)"],
+      ["Fiumicello","Oltremella","15:30","Brescia"],
+      ["Casalmaggiore","Lyons","15:30","Casalbellotto (CR)"] ] },
+    { round: "R", n: 6, date: "11/04/2027", m: [
+      ["Carpi","Valorugby Emilia","15:30","Carpi (MO)"],
+      ["Villadose 76","Bassa Bresciana Leno","15:30","Villadose (RO)"],
+      ["Fiumicello","Casalmaggiore","15:30","Brescia"],
+      ["Oltremella","Parma","15:30","Roncadelle (BS)"],
+      ["Lyons","Rovato","15:30","Piacenza"] ] },
+    { round: "R", n: 7, date: "18/04/2027", m: [
+      ["Valorugby Emilia","Lyons","15:30","Reggio Emilia"],
+      ["Parma","Villadose 76","15:30","Parma"],
+      ["Bassa Bresciana Leno","Carpi","15:30","Leno (BS)"],
+      ["Rovato","Fiumicello","15:30","Rovato (BS)"],
+      ["Casalmaggiore","Oltremella","15:30","Casalbellotto (CR)"] ] },
+    { round: "R", n: 8, date: "09/05/2027", m: [
+      ["Fiumicello","Valorugby Emilia","15:30","Brescia"],
+      ["Lyons","Villadose 76","15:30","Piacenza"],
+      ["Carpi","Parma","15:30","Carpi (MO)"],
+      ["Oltremella","Bassa Bresciana Leno","15:30","Roncadelle (BS)"],
+      ["Casalmaggiore","Rovato","15:30","Casalbellotto (CR)"] ] },
+    { round: "R", n: 9, date: "16/05/2027", m: [
+      ["Valorugby Emilia","Casalmaggiore","15:30","Reggio Emilia"],
+      ["Villadose 76","Carpi","15:30","Villadose (RO)"],
+      ["Bassa Bresciana Leno","Fiumicello","15:30","Leno (BS)"],
+      ["Parma","Lyons","12:30","Parma"],
+      ["Rovato","Oltremella","15:30","Rovato (BS)"] ] }
+  ];
+
+  function gid(g) { return g.round + g.n; }
+
+  // ---- derive Fiumicello-only fixture list from the single source of truth ----
+  var FIUMICELLO = [];
+  GIORNATE.forEach(function (g) {
+    g.m.forEach(function (m) {
+      if (m[0] === "Fiumicello" || m[1] === "Fiumicello") {
+        FIUMICELLO.push({
+          round: g.round, n: g.n, date: g.date,
+          home: m[0] === "Fiumicello",
+          opponent: m[0] === "Fiumicello" ? m[1] : m[0],
+          time: m[2], sede: m[3]
+        });
+      }
+    });
+  });
+
+  var PILL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-3-3-3-15 0-18M12 3c3 3 3 15 0 18M4 12h16" stroke-linecap="round"/></svg>';
+
+  var state = { tab: "fiu", giornata: null };
+
+  var chiprowEl = document.getElementById("chiprow");
+  var listEl = document.getElementById("list");
+  var statlineEl = document.getElementById("statline");
+  var tabFiu = document.getElementById("tab-fiu");
+  var tabG2 = document.getElementById("tab-g2");
+
+  function buildChips() {
+    var html = '<button class="chip" data-g="" aria-pressed="' + (state.giornata === null) + '">Tutte</button>';
+    GIORNATE.forEach(function (g) {
+      var id = gid(g);
+      var label = (g.round === "A" ? "A" : "R") + g.n;
+      html += '<button class="chip" data-g="' + id + '" aria-pressed="' + (state.giornata === id) + '">' +
+        label + '<small>' + fmtShort(g.date) + '</small></button>';
+    });
+    chiprowEl.innerHTML = html;
+  }
+
+  function cardHtml(opts) {
+    var meta = (opts.round === "A" ? "Andata" : "Ritorno") + " &middot; G" + opts.n + " &middot; " + fmtFull(opts.date).replace(/^\w/, function (c) { return c.toUpperCase(); });
+    var home = opts.home, away = opts.away;
+    var homeCls = home === "Fiumicello" ? "fiu" : "";
+    var awayCls = away === "Fiumicello" ? "fiu" : "";
+    var isFiuHome = home === "Fiumicello";
+    var isFiuAway = away === "Fiumicello";
+    var cardCls = (isFiuHome ? " is-home" : "");
+    var badge = isFiuHome ? '<span class="badge">CASA</span>' : (isFiuAway ? '<span class="badge" style="color:var(--ink-soft);background:var(--bg-sunk);">TRASFERTA</span>' : "");
+    return (
+      '<div class="card' + cardCls + '">' +
+        '<div class="card__meta"><span class="when">' + opts.time + '</span>' + badge + '</div>' +
+        '<div class="card__meta" style="margin-top:-4px;margin-bottom:8px;font-weight:600;color:var(--ink-faint);text-transform:none;letter-spacing:0;">' + meta + '</div>' +
+        '<div class="card__match"><span class="' + homeCls + '">' + home + '</span><span class="sep">&ndash;</span><span class="' + awayCls + '">' + away + '</span></div>' +
+        '<div class="card__foot">' + PILL_ICON + '<span>' + opts.sede + '</span></div>' +
+      '</div>'
+    );
+  }
+
+  function renderFiumicello() {
+    var items = FIUMICELLO.slice();
+    if (state.giornata) items = items.filter(function (m) { return (m.round + m.n) === state.giornata; });
+
+    var home = FIUMICELLO.filter(function (m) { return m.home; }).length;
+    var away = FIUMICELLO.length - home;
+    statlineEl.innerHTML =
+      '<span><strong>' + items.length + '</strong> partit' + (items.length === 1 ? "a" : "e") + '</span>' +
+      '<span class="split"><span>Casa <b>' + home + '</b></span><span class="away">Trasferta <b>' + away + '</b></span></span>';
+
+    if (!items.length) { listEl.innerHTML = '<p class="empty">Nessuna partita per questa giornata.</p>'; return; }
+
+    listEl.innerHTML = items.map(function (m) {
+      var h = m.home ? "Fiumicello" : m.opponent;
+      var a = m.home ? m.opponent : "Fiumicello";
+      return cardHtml({ round: m.round, n: m.n, date: m.date, time: m.time, sede: m.sede, home: h, away: a });
+    }).join("");
+  }
+
+  function renderGirone2() {
+    var giornate = GIORNATE.slice();
+    if (state.giornata) giornate = giornate.filter(function (g) { return gid(g) === state.giornata; });
+
+    var totalMatches = giornate.reduce(function (n, g) { return n + g.m.length; }, 0);
+    statlineEl.innerHTML =
+      '<span><strong>' + totalMatches + '</strong> partit' + (totalMatches === 1 ? "a" : "e") + '</span>' +
+      '<span class="split"><span>' + giornate.length + ' giornat' + (giornate.length === 1 ? "a" : "e") + '</span></span>';
+
+    if (!giornate.length) { listEl.innerHTML = '<p class="empty">Nessuna giornata selezionata.</p>'; return; }
+
+    var html = "";
+    giornate.forEach(function (g) {
+      if (!state.giornata) {
+        html += '<div class="group-head">' + (g.round === "A" ? "Andata" : "Ritorno") + ' &middot; Giornata ' + g.n + ' &middot; ' + fmtShort(g.date) + '</div>';
+      }
+      g.m.forEach(function (m) {
+        html += cardHtml({ round: g.round, n: g.n, date: g.date, time: m[2], sede: m[3], home: m[0], away: m[1] });
+      });
+    });
+    listEl.innerHTML = html;
+  }
+
+  function render() {
+    buildChips();
+    if (state.tab === "fiu") renderFiumicello(); else renderGirone2();
+  }
+
+  chiprowEl.addEventListener("click", function (e) {
+    var btn = e.target.closest(".chip");
+    if (!btn) return;
+    state.giornata = btn.getAttribute("data-g") || null;
+    render();
+  });
+
+  tabFiu.addEventListener("click", function () {
+    state.tab = "fiu";
+    tabFiu.setAttribute("aria-selected", "true");
+    tabG2.setAttribute("aria-selected", "false");
+    render();
+  });
+  tabG2.addEventListener("click", function () {
+    state.tab = "g2";
+    tabG2.setAttribute("aria-selected", "true");
+    tabFiu.setAttribute("aria-selected", "false");
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
