@@ -289,16 +289,33 @@
     border-radius: 999px;
   }
 
-  .card__match {
-    display: flex;
+  .card__matchup {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: baseline;
-    gap: 8px;
+    column-gap: 8px;
+    row-gap: 4px;
+  }
+  .card__matchup .team {
     font-size: 15.5px;
     font-weight: 700;
-    text-wrap: balance;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .card__match .sep { color: var(--ink-faint); font-weight: 400; }
-  .card__match .fiu { color: var(--turf-strong); }
+  .card__matchup .team.home { text-align: right; }
+  .card__matchup .team.away { text-align: left; }
+  .card__matchup .team.fiu { color: var(--turf-strong); }
+  .card__matchup .sep { color: var(--ink-faint); font-weight: 400; text-align: center; }
+  .card__matchup .score {
+    font-size: 20.25px; /* 15px + 135% */
+    font-weight: 800;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .card__matchup .score.home { text-align: right; }
+  .card__matchup .score.away { text-align: left; }
+  .card__matchup .score-sep { color: var(--ink-faint); font-weight: 400; text-align: center; }
 
   .card__foot {
     margin-top: 6px;
@@ -562,7 +579,8 @@
           round: g.round, n: g.n, date: g.date,
           home: m[0] === "Fiumicello",
           opponent: m[0] === "Fiumicello" ? m[1] : m[0],
-          time: m[2], sede: m[3]
+          time: m[2], sede: m[3],
+          scoreHome: m[4], scoreAway: m[5]
         });
       }
     });
@@ -599,11 +617,20 @@
     var isFiuAway = away === "Fiumicello";
     var cardCls = (isFiuHome ? " is-home" : "");
     var badge = isFiuHome ? '<span class="badge">CASA</span>' : (isFiuAway ? '<span class="badge" style="color:var(--ink-soft);background:var(--bg-sunk);">TRASFERTA</span>' : "");
+    var sh = (opts.scoreHome != null) ? opts.scoreHome : "–";
+    var sa = (opts.scoreAway != null) ? opts.scoreAway : "–";
     return (
       '<div class="card' + cardCls + '">' +
         '<div class="card__meta"><span class="when">' + opts.time + '</span>' + badge + '</div>' +
         '<div class="card__meta" style="margin-top:-4px;margin-bottom:8px;font-weight:600;color:var(--ink-faint);text-transform:none;letter-spacing:0;">' + meta + '</div>' +
-        '<div class="card__match"><span class="' + homeCls + '">' + home + '</span><span class="sep">&ndash;</span><span class="' + awayCls + '">' + away + '</span></div>' +
+        '<div class="card__matchup">' +
+          '<span class="team home ' + homeCls + '">' + home + '</span>' +
+          '<span class="sep">&ndash;</span>' +
+          '<span class="team away ' + awayCls + '">' + away + '</span>' +
+          '<span class="score home">' + sh + '</span>' +
+          '<span class="score-sep">&ndash;</span>' +
+          '<span class="score away">' + sa + '</span>' +
+        '</div>' +
         '<div class="card__foot">' + PILL_ICON + '<span>' + opts.sede + '</span></div>' +
       '</div>'
     );
@@ -624,7 +651,7 @@
     listEl.innerHTML = items.map(function (m) {
       var h = m.home ? "Fiumicello" : m.opponent;
       var a = m.home ? m.opponent : "Fiumicello";
-      return cardHtml({ round: m.round, n: m.n, date: m.date, time: m.time, sede: m.sede, home: h, away: a });
+      return cardHtml({ round: m.round, n: m.n, date: m.date, time: m.time, sede: m.sede, home: h, away: a, scoreHome: m.scoreHome, scoreAway: m.scoreAway });
     }).join("");
   }
 
@@ -645,7 +672,7 @@
         html += '<div class="group-head">' + (g.round === "A" ? "Andata" : "Ritorno") + ' &middot; Giornata ' + g.n + ' &middot; ' + fmtShort(g.date) + '</div>';
       }
       g.m.forEach(function (m) {
-        html += cardHtml({ round: g.round, n: g.n, date: g.date, time: m[2], sede: m[3], home: m[0], away: m[1] });
+        html += cardHtml({ round: g.round, n: g.n, date: g.date, time: m[2], sede: m[3], home: m[0], away: m[1], scoreHome: m[4], scoreAway: m[5] });
       });
     });
     listEl.innerHTML = html;
