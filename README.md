@@ -10,6 +10,8 @@ va caricato qui — quello resta nel vault privato `Rugby BORGO-Coach-Vault`.
 
 - [`calendario-serie-b-2026-27.html`](calendario-serie-b-2026-27.html) — Calendario Serie B
   2026/27, Girone 2, con filtro per giornata (mobile-friendly)
+- [`calendario-serie-c-girone1-2026-27.html`](calendario-serie-c-girone1-2026-27.html) — Calendario
+  Serie C 2026/27, Girone 1 Lombardia, con filtro per giornata (mobile-friendly)
 
 ## Come si aggiunge una nuova pagina
 
