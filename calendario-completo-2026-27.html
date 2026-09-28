@@ -623,7 +623,7 @@
       ["Brixia","Fiumicello","14:30","Gussago (BS)"],
       ["Harlequins","Valle Camonica","14:30","Verdello (BG)"] ] },
     { round: "A", n: 3, date: "01/11/2026", m: [
-      ["Brixia","Bergamo 1950","12:30","Gussago (BS)"],
+      ["Brixia","Bergamo 1950","14:30","Gussago (BS)"],
       ["Botticino","Harlequins","14:30","Botticino (BS)"],
       ["Centurioni","Garda","14:30","Villa Carcina (BS)"],
       ["Valle Camonica","Fiumicello","14:30","Rogno (BG)"] ] },
@@ -638,14 +638,14 @@
       ["Harlequins","Fiumicello","14:30","Verdello (BG)"],
       ["Valle Camonica","Brixia","14:30","Rogno (BG)"] ] },
     { round: "A", n: 6, date: "06/12/2026", m: [
-      ["Bergamo 1950","Harlequins","14:30","Bergamo"],
+      ["Bergamo 1950","Harlequins","19:00","Bergamo (campo Utili)",null,null,"05/12/2026"],
       ["Fiumicello","Botticino","14:30","Brescia"],
       ["Rovato","Valle Camonica","14:30","Rovato (BS)"],
       ["Brixia","Garda","14:30","Gussago (BS)"] ] },
     { round: "A", n: 7, date: "13/12/2026", m: [
       ["Valle Camonica","Bergamo 1950","14:30","Rogno (BG)"],
       ["Botticino","Centurioni","14:30","Botticino (BS)"],
-      ["Brixia","Rovato","14:30","Gussago (BS)"],
+      ["Brixia","Rovato","12:30","Gussago (BS)"],
       ["Garda","Fiumicello","14:30","Desenzano d/G (BS)"] ] },
     { round: "A", n: 8, date: "17/01/2027", m: [
       ["Rovato","Bergamo 1950","14:30","Rovato (BS)"],
@@ -693,7 +693,7 @@
       ["Rovato","Brixia","12:30","Rovato (BS)"],
       ["Fiumicello","Garda","12:30","Brescia"] ] },
     { round: "R", n: 8, date: "18/04/2027", m: [
-      ["Bergamo 1950","Rovato","15:30","Bergamo"],
+      ["Bergamo 1950","Rovato","19:00","Bergamo (campo Utili)",null,null,"17/04/2027"],
       ["Valle Camonica","Botticino","15:30","Rogno (BG)"],
       ["Brixia","Centurioni","15:30","Gussago (BS)"],
       ["Garda","Harlequins","15:30","Desenzano d/G (BS)"] ] },
@@ -830,7 +830,7 @@
           html += '<div class="group-head">' + (g.round === "A" ? "Andata" : "Ritorno") + ' &middot; Giornata ' + g.n + ' &middot; ' + fmtShort(g.date) + '</div>';
         }
         g.m.forEach(function (m) {
-          html += cardHtml({ round: g.round, n: g.n, date: g.date, time: m[2], sede: m[3], home: m[0], away: m[1], scoreHome: m[4], scoreAway: m[5] });
+          html += cardHtml({ round: g.round, n: g.n, date: m[6] || g.date, time: m[2], sede: m[3], home: m[0], away: m[1], scoreHome: m[4], scoreAway: m[5] });
         });
       });
       listEl.innerHTML = html;
