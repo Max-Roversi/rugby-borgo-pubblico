@@ -605,7 +605,7 @@
     R4: { name: "Campo Dorando Pietri", street: "Via Nuova Ponente, 30/A" },
     R5: { name: "Campo Bruno Menta", street: "Via Collebeato, 6" },
     R6: { name: "Campo Bruno Menta", street: "Via Collebeato, 6" },
-    R7: { name: "Stadio G. e S. Pagani", street: "Via 1° Maggio" },
+    R7: { name: "Campo Mantova Rugby Club 1975", street: "Viale Learco Guerra, 13" },
     R8: { name: "Campo Bruno Menta", street: "Via Collebeato, 6" },
     R9: { name: "Nuovo Campo Comunale Rugby", street: "Via Martin L. King" }
   };
@@ -708,7 +708,7 @@
   // (fonte: tabella CAMPI, file FIR Serie C Girone 1). Il campo casalingo "Menta" a
   // Brescia è condiviso con la Serie B: soggetto a variazione se non disponibile.
   var FIU_VENUES_C = {
-    A1: { name: "Campo Gallo Rocchelli", street: "Via Agostino Gallo, 32" },
+    A1: { name: "Campo Gallo Rocchelli", street: "Via Sorelle Girelli, 18", note: "Sede &amp; 3° Tempo: Via Agostino Gallo, 32" },
     A2: { name: "Corcione", street: "Via Gramsci, 60" },
     A3: { name: "Giori", street: "Via Pascoli, SNC" },
     A4: { name: "Campo Bruno Menta", street: "Via Collebeato, 6" },
@@ -849,7 +849,7 @@
           '<div class="venue-icon">' + PIN_ICON + '</div>' +
           '<div class="venue-body">' +
             '<div class="venue-name">' + v.name + '</div>' +
-            '<div class="venue-addr">' + addr + '</div>' +
+            '<div class="venue-addr">' + addr + '</div>' + (v.note ? '<div class="venue-addr">' + v.note + '</div>' : '') +
           '</div>' +
           '<a class="venue-link" href="https://www.google.com/maps/search/?api=1&query=' + mapsQuery + '" target="_blank" rel="noopener">Apri in Maps</a>' +
         '</div>';
