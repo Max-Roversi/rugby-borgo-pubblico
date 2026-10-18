@@ -317,6 +317,7 @@
     gap: 5px;
   }
   .card__foot svg { width: 12px; height: 12px; flex: none; opacity: 0.7; }
+  .card__note { margin-top: 8px; padding: 6px 10px; border-radius: 8px; background: var(--gold-tint); color: var(--gold); font-size: 12.5px; font-weight: 700; }
 
   .empty {
     text-align: center;
@@ -620,7 +621,7 @@
     { round: "A", n: 2, date: "25/10/2026", m: [
       ["Garda","Botticino","14:30","Desenzano d/G (BS)"],
       ["Rovato","Centurioni","14:30","Rovato (BS)"],
-      ["Brixia","Fiumicello","14:30","Gussago (BS)"],
+      ["Brixia","Fiumicello","18:00","Gussago (BS)",null,null,"24/10/2026","Anticipo: sabato 24/10 ore 18:00 (era domenica 25/10)"],
       ["Harlequins","Valle Camonica","14:30","Verdello (BG)"] ] },
     { round: "A", n: 3, date: "01/11/2026", m: [
       ["Brixia","Bergamo 1950","14:30","Gussago (BS)"],
@@ -736,7 +737,7 @@
       g.m.forEach(function (m) {
         if (m[0] === "Fiumicello" || m[1] === "Fiumicello") {
           FIUMICELLO.push({
-            round: g.round, n: g.n, date: g.date,
+            round: g.round, n: g.n, date: m[6] || g.date, nota: m[7],
             home: m[0] === "Fiumicello",
             opponent: m[0] === "Fiumicello" ? m[1] : m[0],
             time: m[2], sede: m[3],
@@ -790,6 +791,7 @@
             '<span class="score away">' + sa + '</span>' +
           '</div>' +
           '<div class="card__foot">' + PILL_ICON + '<span>' + opts.sede + '</span></div>' +
+          (opts.nota ? '<div class="card__note">' + opts.nota + '</div>' : '') +
         '</div>'
       );
     }
@@ -809,7 +811,7 @@
       listEl.innerHTML = items.map(function (m) {
         var h = m.home ? "Fiumicello" : m.opponent;
         var a = m.home ? m.opponent : "Fiumicello";
-        return cardHtml({ round: m.round, n: m.n, date: m.date, time: m.time, sede: m.sede, home: h, away: a, scoreHome: m.scoreHome, scoreAway: m.scoreAway });
+        return cardHtml({ round: m.round, n: m.n, date: m.date, time: m.time, sede: m.sede, home: h, away: a, scoreHome: m.scoreHome, scoreAway: m.scoreAway, nota: m.nota });
       }).join("");
     }
 
@@ -830,7 +832,7 @@
           html += '<div class="group-head">' + (g.round === "A" ? "Andata" : "Ritorno") + ' &middot; Giornata ' + g.n + ' &middot; ' + fmtShort(g.date) + '</div>';
         }
         g.m.forEach(function (m) {
-          html += cardHtml({ round: g.round, n: g.n, date: m[6] || g.date, time: m[2], sede: m[3], home: m[0], away: m[1], scoreHome: m[4], scoreAway: m[5] });
+          html += cardHtml({ round: g.round, n: g.n, date: m[6] || g.date, time: m[2], sede: m[3], home: m[0], away: m[1], scoreHome: m[4], scoreAway: m[5], nota: m[7] });
         });
       });
       listEl.innerHTML = html;
