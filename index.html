@@ -3,65 +3,151 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Rugby Borgo — Pagine pubbliche</title>
+<title>BorgoFiumi — Stagione 2026/27</title>
 <style>
   :root {
     --bg: #f5f3ec;
+    --bg-elev: #ffffff;
+    --bg-sunk: #ece8db;
     --ink: #1c211d;
     --ink-soft: #5b655e;
+    --ink-faint: #8b9188;
     --turf: #2f6b45;
+    --turf-strong: #1f4f33;
+    --turf-tint: #e3ede3;
+    --gold: #a9701b;
+    --gold-tint: #f4e6cd;
     --line: #ddd7c7;
+    --shadow: 0 1px 2px rgba(28, 33, 29, 0.06), 0 6px 16px -8px rgba(28, 33, 29, 0.18);
+    --radius: 14px;
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #101f16; --ink: #edf1ea; --ink-soft: #a9b6ab; --turf: #74c493; --line: #24402f; }
+    :root {
+      --bg: #101f16; --bg-elev: #16281c; --bg-sunk: #0c1710;
+      --ink: #edf1ea; --ink-soft: #a9b6ab; --ink-faint: #728174;
+      --turf: #74c493; --turf-strong: #8fd6ac; --turf-tint: #1c3526;
+      --gold: #e3ab5c; --gold-tint: #3a2c14; --line: #24402f;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+    }
   }
-  * { box-sizing: border-box; }
+  :root[data-theme="dark"] {
+    --bg: #101f16; --bg-elev: #16281c; --bg-sunk: #0c1710;
+    --ink: #edf1ea; --ink-soft: #a9b6ab; --ink-faint: #728174;
+    --turf: #74c493; --turf-strong: #8fd6ac; --turf-tint: #1c3526;
+    --gold: #e3ab5c; --gold-tint: #3a2c14; --line: #24402f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+  }
+  :root[data-theme="light"] {
+    --bg: #f5f3ec; --bg-elev: #ffffff; --bg-sunk: #ece8db;
+    --ink: #1c211d; --ink-soft: #5b655e; --ink-faint: #8b9188;
+    --turf: #2f6b45; --turf-strong: #1f4f33; --turf-tint: #e3ede3;
+    --gold: #a9701b; --gold-tint: #f4e6cd; --line: #ddd7c7;
+    --shadow: 0 1px 2px rgba(28, 33, 29, 0.06), 0 6px 16px -8px rgba(28, 33, 29, 0.18);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); overflow-x: hidden; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
+    font-family: -apple-system, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px; line-height: 1.45;
+    display: flex; justify-content: center;
   }
-  main { width: 100%; max-width: 560px; padding: 32px 20px; }
-  h1 { font-size: 22px; font-weight: 800; margin: 0 0 4px; }
-  p.sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 24px; }
-  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-  a.card {
-    display: block;
-    padding: 14px 16px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    color: var(--turf);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 15px;
+  .app { width: 100%; max-width: 560px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+
+  .head {
+    padding: calc(18px + var(--safe-t)) 18px 20px;
+    background: linear-gradient(180deg, var(--turf-strong), var(--turf));
+    color: #f7fbf8;
   }
-  a.card small { display: block; color: var(--ink-soft); font-weight: 400; font-size: 12.5px; margin-top: 3px; }
+  .head__eyebrow {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase;
+    opacity: .82; display: flex; align-items: center; gap: 8px;
+  }
+  .head__eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .6; }
+  .head__title { margin: 4px 0 0; font-size: 28px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; }
+  .head__sub { margin: 3px 0 0; font-size: 14px; color: rgba(247,251,248,.78); }
+
+  main { padding: 18px 18px calc(24px + var(--safe-b)); display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .section-label {
+    margin: 4px 2px 0; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .launcher {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--bg-elev); border: 1px solid var(--line); border-left: 4px solid var(--turf);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 16px 16px 15px; display: flex; align-items: center; gap: 14px;
+  }
+  .launcher.ext { border-left-color: var(--gold); }
+  .launcher__icon {
+    flex: none; width: 46px; height: 46px; border-radius: 12px; background: var(--turf-tint);
+    color: var(--turf-strong); display: flex; align-items: center; justify-content: center;
+    font-size: 21px; font-weight: 800;
+  }
+  .launcher.ext .launcher__icon { background: var(--gold-tint); color: var(--gold); }
+  .launcher__body { flex: 1; min-width: 0; }
+  .launcher__title { font-size: 16.5px; font-weight: 800; display: flex; align-items: center; gap: 7px; }
+  .launcher__title .tag {
+    font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 999px; background: var(--gold-tint); color: var(--gold);
+  }
+  .launcher__desc { margin-top: 2px; font-size: 13px; color: var(--ink-soft); }
+  .launcher__chev { flex: none; color: var(--ink-faint); font-size: 20px; line-height: 1; }
+
+  .note {
+    margin: 10px 2px 0; padding: 12px 14px; border-radius: var(--radius);
+    background: var(--bg-sunk); border: 1px solid var(--line); color: var(--ink-soft); font-size: 12.5px;
+  }
+  .note b { color: var(--ink); }
+
+  footer { padding: 4px 18px calc(18px + var(--safe-b)); font-size: 11.5px; color: var(--ink-faint); text-align: center; }
 </style>
 </head>
 <body>
-<main>
-  <h1>Rugby Borgo — Pagine pubbliche</h1>
-  <p class="sub">Calendari e strumenti condivisibili.</p>
-  <ul>
-    <li><a class="card" href="calendario-completo-2026-27.html">Calendario Rugby Borgo 2026/27
-      <small>Serie B + Serie C insieme, con avviso sovrapposizione campo</small>
-    </a></li>
-    <li><a class="card" href="calendario-serie-b-2026-27.html">Calendario Serie B 2026/27
-      <small>Girone 2, filtro per giornata</small>
-    </a></li>
-    <li><a class="card" href="calendario-serie-a-girone2-2026-27.html">Calendario Serie A 2026/27
-      <small>Girone 2 Territoriale, focus Rugby Bergamo 1950</small>
-    </a></li>
-    <li><a class="card" href="calendario-serie-c-girone1-2026-27.html">Calendario Serie C 2026/27
-      <small>Girone 1 Lombardia, filtro per giornata</small>
-    </a></li>
-    <li><a class="card" href="https://github.com/Max-Roversi/rugby-borgo-pubblico/blob/master/Risultati_Serie_B-C_2026-27.xlsx">Risultati Serie B &amp; C 2026/27 (Excel)
-      <small>Tabella da compilare/aggiornare con i punteggi partita per partita</small>
-    </a></li>
-  </ul>
-</main>
+<div class="app">
+  <div class="head">
+    <div class="head__eyebrow">Rugby Borgo <span class="dot"></span> ASD Rugby Fiumicello</div>
+    <h1 class="head__title">BorgoFiumi</h1>
+    <p class="head__sub">Stagione 2026/27 — calendario, statistiche e risultati</p>
+  </div>
+
+  <main>
+    <p class="section-label">Scegli una sezione</p>
+
+    <a class="launcher" href="calendario-completo-2026-27.html">
+      <span class="launcher__icon">📅</span>
+      <span class="launcher__body">
+        <span class="launcher__title">Calendario</span>
+        <span class="launcher__desc">Serie B e Serie C: partite, orari, campi con mappa</span>
+      </span>
+      <span class="launcher__chev">›</span>
+    </a>
+
+    <a class="launcher ext" href="https://claude.ai/artifact/VqrdBwP7B92vCxz1UNAhGh" target="_blank" rel="noopener">
+      <span class="launcher__icon">📊</span>
+      <span class="launcher__body">
+        <span class="launcher__title">Statistiche <span class="tag">claude.ai</span></span>
+        <span class="launcher__desc">Presenze, minuti, mete, punti e cartellini di ogni atleta</span>
+      </span>
+      <span class="launcher__chev">›</span>
+    </a>
+
+    <a class="launcher ext" href="https://claude.ai/artifact/XM8PqDCX4j5e3jLH1RqRt5" target="_blank" rel="noopener">
+      <span class="launcher__icon">🏉</span>
+      <span class="launcher__body">
+        <span class="launcher__title">Risultati <span class="tag">claude.ai</span></span>
+        <span class="launcher__desc">Punteggi partita per partita e classifica live</span>
+      </span>
+      <span class="launcher__chev">›</span>
+    </a>
+
+    <p class="note"><b>Statistiche</b> e <b>Risultati</b> aprono una pagina claude.ai: per essere visibili da qui a chiunque, vanno condivise con il link pubblico dal menu Condividi di ciascuna pagina.</p>
+  </main>
+
+  <footer>Rugby Borgo / ASD Rugby Fiumicello</footer>
+</div>
 </body>
 </html>
