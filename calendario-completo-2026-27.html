@@ -747,7 +747,12 @@
       });
     });
 
-    var state = { tab: "fiu", giornata: null };
+    // all'apertura: ultima giornata con almeno un risultato inserito (non "Tutte")
+    var ultimaGiocata = null;
+    cfg.GIORNATE.forEach(function (g) {
+      if (g.m.some(function (m) { return m[4] != null; })) ultimaGiocata = gid(g);
+    });
+    var state = { tab: "fiu", giornata: ultimaGiocata };
 
     var chiprowEl = document.getElementById("chiprow-" + cfg.suffix);
     var listEl = document.getElementById("list-" + cfg.suffix);
