@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Risultati e classifica — Rugby Borgo 2026/27</title>
+<style>
+  :root {
+    --bg: #f5f3ec;
+    --bg-elev: #ffffff;
+    --bg-sunk: #ece8db;
+    --ink: #1c211d;
+    --ink-soft: #5b655e;
+    --ink-faint: #8b9188;
+    --turf: #2f6b45;
+    --turf-strong: #1f4f33;
+    --turf-tint: #e3ede3;
+    --gold: #a9701b;
+    --gold-tint: #f4e6cd;
+    --line: #ddd7c7;
+    --shadow: 0 1px 2px rgba(28, 33, 29, 0.06), 0 6px 16px -8px rgba(28, 33, 29, 0.18);
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101f16; --bg-elev: #16281c; --bg-sunk: #0c1710;
+      --ink: #edf1ea; --ink-soft: #a9b6ab; --ink-faint: #728174;
+      --turf: #74c493; --turf-strong: #8fd6ac; --turf-tint: #1c3526;
+      --gold: #e3ab5c; --gold-tint: #3a2c14; --line: #24402f;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101f16; --bg-elev: #16281c; --bg-sunk: #0c1710;
+    --ink: #edf1ea; --ink-soft: #a9b6ab; --ink-faint: #728174;
+    --turf: #74c493; --turf-strong: #8fd6ac; --turf-tint: #1c3526;
+    --gold: #e3ab5c; --gold-tint: #3a2c14; --line: #24402f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+  }
+  :root[data-theme="light"] {
+    --bg: #f5f3ec; --bg-elev: #ffffff; --bg-sunk: #ece8db;
+    --ink: #1c211d; --ink-soft: #5b655e; --ink-faint: #8b9188;
+    --turf: #2f6b45; --turf-strong: #1f4f33; --turf-tint: #e3ede3;
+    --gold: #a9701b; --gold-tint: #f4e6cd; --line: #ddd7c7;
+    --shadow: 0 1px 2px rgba(28, 33, 29, 0.06), 0 6px 16px -8px rgba(28, 33, 29, 0.18);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .app { max-width: 560px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; padding-bottom: 24px; }
+
+  .head { padding-block: 18px 14px; padding-inline: 18px; background: linear-gradient(180deg, var(--turf-strong), var(--turf)); color: #f7fbf8; }
+  .head__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .head__eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; opacity: .82; display: flex; align-items: center; gap: 8px; }
+  .head__eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .6; }
+  .head__title { margin: 4px 0 0; font-size: 23px; font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; }
+  .head__sub { margin: 3px 0 0; font-size: 13px; color: rgba(247,251,248,.78); }
+  .head__home { flex: none; color: rgba(247,251,248,.8); text-decoration: none; font-size: 12.5px; font-weight: 700; border: 1px solid rgba(247,251,248,.35); border-radius: 999px; padding: 5px 10px; white-space: nowrap; }
+
+  .tabs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: rgba(0,0,0,.16); border-radius: 11px; padding: 3px; gap: 3px; }
+  .tabs--top { margin: 14px 18px 0; }
+  .tabs--sub { margin: 12px 18px 0; background: var(--bg-sunk); }
+  .tab { appearance: none; border: 0; background: transparent; font: inherit; font-weight: 700; font-size: 13px; padding: 9px 6px; border-radius: 8px; cursor: pointer; color: var(--ink-soft); }
+  .tabs--top .tab { color: rgba(247,251,248,.75); }
+  .tab[aria-selected="true"] { background: var(--bg-elev); color: var(--turf-strong); box-shadow: var(--shadow); }
+
+  .filterbar { padding: 10px 0; }
+  .chiprow { display: flex; gap: 7px; overflow-x: auto; padding: 0 18px; scrollbar-width: none; }
+  .chiprow::-webkit-scrollbar { display: none; }
+  .chip {
+    appearance: none; flex: 0 0 auto; border: 1px solid var(--line); background: var(--bg-elev);
+    color: var(--ink-soft); font: inherit; font-weight: 700; font-size: 12.5px; padding: 7px 12px;
+    border-radius: 999px; cursor: pointer; display: flex; flex-direction: column; align-items: center;
+    line-height: 1.15; min-height: 40px; justify-content: center;
+  }
+  .chip small { font-size: 9.5px; font-weight: 600; color: var(--ink-faint); text-transform: uppercase; margin-top: 1px; }
+  .chip[aria-pressed="true"] { background: var(--turf); border-color: var(--turf); color: #f7fbf8; }
+  .chip[aria-pressed="true"] small { color: rgba(247,251,248,.75); }
+
+  .statline { padding: 12px 18px 2px; font-size: 12.5px; color: var(--ink-faint); display: flex; justify-content: space-between; }
+  .statline b { color: var(--turf-strong); font-variant-numeric: tabular-nums; }
+
+  .list { padding: 8px 18px 4px; display: flex; flex-direction: column; gap: 10px; }
+  .group-head { margin-top: 8px; padding: 2px 2px 0; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--turf-strong); display: flex; align-items: center; gap: 8px; }
+  .group-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  .match { background: var(--bg-elev); border: 1px solid var(--line); border-left: 3px solid var(--line); border-radius: var(--radius); padding: 11px 13px; box-shadow: var(--shadow); }
+  .match.is-fiu { border-left-color: var(--gold); }
+  .match__meta { display: flex; align-items: center; justify-content: space-between; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; color: var(--ink-faint); text-transform: uppercase; margin-bottom: 8px; }
+  .match__meta .when { font-variant-numeric: tabular-nums; }
+  .pill { font-size: 10px; font-weight: 800; letter-spacing: .05em; padding: 3px 7px; border-radius: 999px; }
+  .pill--played { color: var(--turf-strong); background: var(--turf-tint); }
+  .pill--pending { color: var(--ink-soft); background: var(--bg-sunk); }
+
+  .matchup { display: grid; grid-template-columns: 1fr auto auto 1fr; align-items: center; column-gap: 8px; }
+  .team { font-size: 14.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .team.home { text-align: right; } .team.away { text-align: left; }
+  .team.fiu { color: var(--turf-strong); }
+  .score { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 20px; text-align: center; min-width: 1.6em; }
+  .score.empty { color: var(--ink-faint); font-weight: 400; font-size: 15px; }
+  .sep { color: var(--ink-faint); font-weight: 400; text-align: center; }
+  .tries-row { margin-top: 6px; display: flex; justify-content: space-between; font-size: 11.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  .match__foot { margin-top: 8px; font-size: 12px; color: var(--ink-soft); display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .match__foot svg { width: 11px; height: 11px; flex: none; opacity: .7; }
+  .bonus { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--gold); }
+
+  .empty-list { text-align: center; padding: 36px 20px; color: var(--ink-faint); font-size: 13.5px; }
+
+  .standings-wrap { margin: 8px 18px 0; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-elev); }
+  table.standings { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 560px; }
+  table.standings th, table.standings td { padding: 8px 7px; text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  table.standings th { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); border-bottom: 1px solid var(--line); font-weight: 800; }
+  table.standings td.team-name { text-align: left; font-weight: 700; color: var(--ink); }
+  table.standings td.pts { font-weight: 800; color: var(--turf-strong); }
+  table.standings tbody tr:nth-child(even) { background: var(--bg-sunk); }
+  table.standings tr.is-fiu td.team-name { color: var(--turf-strong); }
+
+  .foot-note { padding: 16px 18px 4px; font-size: 11px; color: var(--ink-faint); text-align: center; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="head">
+    <div class="head__top">
+      <div>
+        <div class="head__eyebrow">Rugby Borgo <span class="dot"></span> ASD Rugby Fiumicello</div>
+        <h1 class="head__title">Risultati 2026/27</h1>
+        <p class="head__sub" id="headSub">Serie B &middot; Girone 2</p>
+      </div>
+      <a class="head__home" href="index.html">BorgoFiumi</a>
+    </div>
+
+    <div class="tabs tabs--top" role="tablist" aria-label="Campionato">
+      <button class="tab" id="tab-comp-b" role="tab" aria-selected="true">Serie B</button>
+      <button class="tab" id="tab-comp-c" role="tab" aria-selected="false">Serie C</button>
+    </div>
+  </div>
+
+  <div class="tabs tabs--sub" role="tablist" aria-label="Vista">
+    <button class="tab" id="tab-view-partite" role="tab" aria-selected="true">Partite</button>
+    <button class="tab" id="tab-view-classifica" role="tab" aria-selected="false">Classifica</button>
+  </div>
+
+  <div class="filterbar" id="filterbar">
+    <div class="chiprow" id="chiprow"></div>
+  </div>
+
+  <div class="statline" id="statline"></div>
+
+  <div class="list" id="list"></div>
+
+  <div class="standings-wrap" id="standingsWrap" hidden>
+    <table class="standings" id="standingsTable"></table>
+  </div>
+
+  <p class="foot-note" id="footNote">Punti: vittoria 4, pareggio 2, sconfitta 0. Bonus offensivo (BO): +1 con 4 o più mete. Bonus difensivo (BD): +1 per sconfitta con 7 punti o meno di scarto.<br>Pagina pubblica di sola lettura, aggiornata dagli allenatori dopo ogni giornata.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var MONTHS = ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
+  var WEEKDAYS = ["dom","lun","mar","mer","gio","ven","sab"];
+  var METE_BONUS = 4, SCARTO_BONUS = 7;
+  function parseDate(d) { var p = d.split("/"); return new Date(parseInt(p[2],10), parseInt(p[1],10)-1, parseInt(p[0],10)); }
+  function fmtShort(d) { var dt = parseDate(d); return dt.getDate() + " " + MONTHS[dt.getMonth()]; }
+  function fmtFull(d) { var dt = parseDate(d); return WEEKDAYS[dt.getDay()] + " " + dt.getDate() + " " + MONTHS[dt.getMonth()] + " " + dt.getFullYear(); }
+  function cap(s) { return s.replace(/^\w/, function (c) { return c.toUpperCase(); }); }
+  function gidOf(m) { return m.round + m.n; }
+
+  var PILL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-3-3-3-15 0-18M12 3c3 3 3 15 0 18M4 12h16" stroke-linecap="round"/></svg>';
+
+  var COMP_META = {
+    B: { sub: "Serie B &middot; Girone 2" },
+    C: { sub: "Serie C &middot; Girone 1 Lombardia" }
+  };
+
+  var state = { comp: "B", view: "partite", giornata: null };
+  var docsByComp = { B: [], C: [] };
+  var aggiornato = "";
+
+  var chiprowEl = document.getElementById("chiprow");
+  var listEl = document.getElementById("list");
+  var statlineEl = document.getElementById("statline");
+  var filterbarEl = document.getElementById("filterbar");
+  var headSubEl = document.getElementById("headSub");
+  var standingsWrapEl = document.getElementById("standingsWrap");
+  var standingsTableEl = document.getElementById("standingsTable");
+  var tabCompB = document.getElementById("tab-comp-b");
+  var tabCompC = document.getElementById("tab-comp-c");
+  var tabViewPartite = document.getElementById("tab-view-partite");
+  var tabViewClassifica = document.getElementById("tab-view-classifica");
+
+  function giornateFor(docs) {
+    var seen = {}, order = [];
+    docs.forEach(function (m) {
+      var id = gidOf(m);
+      if (!seen[id]) { seen[id] = { round: m.round, n: m.n, date: m.date, id: id }; order.push(seen[id]); }
+    });
+    order.sort(function (a, b) { if (a.round !== b.round) return a.round === "A" ? -1 : 1; return a.n - b.n; });
+    return order;
+  }
+
+  function buildChips() {
+    var docs = docsByComp[state.comp];
+    var giornate = giornateFor(docs);
+    var html = '<button class="chip" data-g="" aria-pressed="' + (state.giornata === null) + '">Tutte</button>';
+    giornate.forEach(function (g) {
+      var label = (g.round === "A" ? "A" : "R") + g.n;
+      html += '<button class="chip" data-g="' + g.id + '" aria-pressed="' + (state.giornata === g.id) + '">' +
+        label + '<small>' + fmtShort(g.date) + '</small></button>';
+    });
+    chiprowEl.innerHTML = html;
+  }
+
+  function bonusPartita(m) {
+    var r = { home: { o: 0, d: 0 }, away: { o: 0, d: 0 } };
+    if (m.scoreHome == null || m.scoreAway == null) return r;
+    if (m.triesHome != null && m.triesHome >= METE_BONUS) r.home.o = 1;
+    if (m.triesAway != null && m.triesAway >= METE_BONUS) r.away.o = 1;
+    var diff = m.scoreHome - m.scoreAway;
+    if (diff > 0 && diff <= SCARTO_BONUS) r.away.d = 1;
+    if (diff < 0 && -diff <= SCARTO_BONUS) r.home.d = 1;
+    return r;
+  }
+
+  function scoreHtml(v) { return v == null ? '<span class="score empty">&ndash;</span>' : '<span class="score">' + v + '</span>'; }
+
+  function matchHtml(m) {
+    var meta = (m.round === "A" ? "Andata" : "Ritorno") + " &middot; G" + m.n + " &middot; " + cap(fmtFull(m.date));
+    var isFiuHome = m.home === "Fiumicello", isFiuAway = m.away === "Fiumicello";
+    var played = m.scoreHome != null && m.scoreAway != null;
+    var pill = played ? '<span class="pill pill--played">Disputata</span>' : '<span class="pill pill--pending">Da giocare</span>';
+    var b = bonusPartita(m), note = [];
+    if (b.home.o) note.push(m.home + " BO"); if (b.home.d) note.push(m.home + " BD");
+    if (b.away.o) note.push(m.away + " BO"); if (b.away.d) note.push(m.away + " BD");
+    var tries = (m.triesHome != null || m.triesAway != null)
+      ? '<div class="tries-row"><span>Mete: ' + (m.triesHome == null ? "–" : m.triesHome) + '</span><span>' + (m.triesAway == null ? "–" : m.triesAway) + '</span></div>'
+      : "";
+    return (
+      '<div class="match' + (isFiuHome || isFiuAway ? " is-fiu" : "") + '">' +
+        '<div class="match__meta"><span class="when">' + m.time + '</span>' + pill + '</div>' +
+        '<div class="match__meta" style="margin-top:-4px;margin-bottom:8px;font-weight:600;color:var(--ink-faint);text-transform:none;letter-spacing:0;">' + meta + '</div>' +
+        '<div class="matchup">' +
+          '<span class="team home' + (isFiuHome ? " fiu" : "") + '">' + m.home + '</span>' +
+          scoreHtml(m.scoreHome) +
+          scoreHtml(m.scoreAway) +
+          '<span class="team away' + (isFiuAway ? " fiu" : "") + '">' + m.away + '</span>' +
+        '</div>' + tries +
+        '<div class="match__foot">' + PILL_ICON + '<span>' + m.sede + '</span>' +
+          (note.length ? '<span class="bonus">Bonus: ' + note.join(" · ") + '</span>' : '') + '</div>' +
+      '</div>'
+    );
+  }
+
+  function renderPartite() {
+    var docs = docsByComp[state.comp];
+    filterbarEl.hidden = false;
+    standingsWrapEl.hidden = true;
+
+    var items = docs.slice();
+    if (state.giornata) items = items.filter(function (m) { return gidOf(m) === state.giornata; });
+
+    var played = docs.filter(function (m) { return m.scoreHome != null && m.scoreAway != null; }).length;
+    statlineEl.innerHTML =
+      '<span><strong>' + items.length + '</strong> partit' + (items.length === 1 ? "a" : "e") + ' mostrat' + (items.length === 1 ? "a" : "e") + '</span>' +
+      '<span>' + played + ' / ' + docs.length + ' disputate</span>';
+
+    if (!items.length) { listEl.innerHTML = '<p class="empty-list">Nessuna partita per questa giornata.</p>'; return; }
+
+    var html = "", lastG = null;
+    items.forEach(function (m) {
+      if (!state.giornata && gidOf(m) !== lastG) {
+        lastG = gidOf(m);
+        html += '<div class="group-head">' + (m.round === "A" ? "Andata" : "Ritorno") + ' &middot; Giornata ' + m.n + ' &middot; ' + fmtShort(m.date) + '</div>';
+      }
+      html += matchHtml(m);
+    });
+    listEl.innerHTML = html;
+  }
+
+  function computeStandings(docs) {
+    var teams = {};
+    function ensure(name) {
+      if (!teams[name]) teams[name] = { name: name, gp: 0, w: 0, d: 0, l: 0, pf: 0, pa: 0, mf: 0, ms: 0, bo: 0, bd: 0 };
+      return teams[name];
+    }
+    docs.forEach(function (m) {
+      if (m.scoreHome == null || m.scoreAway == null) return;
+      var h = ensure(m.home), a = ensure(m.away), b = bonusPartita(m);
+      h.gp++; a.gp++;
+      h.pf += m.scoreHome; h.pa += m.scoreAway;
+      a.pf += m.scoreAway; a.pa += m.scoreHome;
+      h.mf += m.triesHome || 0; h.ms += m.triesAway || 0;
+      a.mf += m.triesAway || 0; a.ms += m.triesHome || 0;
+      var diff = m.scoreHome - m.scoreAway;
+      if (diff > 0) { h.w++; a.l++; } else if (diff < 0) { a.w++; h.l++; } else { h.d++; a.d++; }
+      h.bo += b.home.o; h.bd += b.home.d; a.bo += b.away.o; a.bd += b.away.d;
+    });
+    var list = Object.keys(teams).map(function (k) {
+      var t = teams[k]; t.diff = t.pf - t.pa; t.pts = t.w * 4 + t.d * 2 + t.bo + t.bd; return t;
+    });
+    list.sort(function (x, y) { return y.pts - x.pts || y.diff - x.diff || y.pf - x.pf; });
+    return list;
+  }
+
+  function renderClassifica() {
+    filterbarEl.hidden = true;
+    listEl.innerHTML = "";
+    var docs = docsByComp[state.comp];
+    var standings = computeStandings(docs);
+    var senzaMete = docs.filter(function (m) { return m.scoreHome != null && m.scoreAway != null && (m.triesHome == null || m.triesAway == null); }).length;
+    statlineEl.innerHTML = '<span>Classifica aggiornata a ' + (standings.reduce(function (n, t) { return n + t.gp; }, 0) / 2) + ' partite disputate</span>' +
+      '<span>' + (senzaMete ? senzaMete + " senza mete: bonus offensivo non calcolato" : "") + '</span>';
+
+    if (!standings.length) {
+      standingsWrapEl.hidden = true;
+      listEl.innerHTML = '<p class="empty-list">Nessun risultato ancora inserito: la classifica comparirà qui.</p>';
+      return;
+    }
+
+    var rows = standings.map(function (t, i) {
+      var isFiu = t.name === "Fiumicello";
+      return (
+        '<tr' + (isFiu ? ' class="is-fiu"' : '') + '>' +
+          '<td>' + (i + 1) + '</td><td class="team-name">' + t.name + '</td>' +
+          '<td class="pts">' + t.pts + '</td><td>' + t.mf + '</td>' +
+          '<td>' + t.gp + '</td><td>' + t.w + '</td><td>' + t.d + '</td><td>' + t.l + '</td>' +
+          '<td>' + t.pf + '</td><td>' + t.pa + '</td><td>' + (t.diff > 0 ? "+" : "") + t.diff + '</td>' +
+          '<td>' + t.ms + '</td><td>' + t.bo + '</td><td>' + t.bd + '</td>' +
+        '</tr>'
+      );
+    }).join("");
+
+    standingsTableEl.innerHTML =
+      '<thead><tr><th>#</th><th style="text-align:left;">Squadra</th><th title="Punti in classifica">Pt</th><th title="Mete fatte">MF</th><th>G</th><th>V</th><th>N</th><th>P</th>' +
+      '<th>PF</th><th>PS</th><th>Diff</th><th title="Mete subite">MS</th>' +
+      '<th title="Bonus offensivo">BO</th><th title="Bonus difensivo">BD</th></tr></thead><tbody>' + rows + '</tbody>';
+    standingsWrapEl.hidden = false;
+  }
+
+  function render() {
+    buildChips();
+    if (state.view === "partite") renderPartite(); else renderClassifica();
+  }
+
+  chiprowEl.addEventListener("click", function (e) {
+    var btn = e.target.closest(".chip");
+    if (!btn) return;
+    state.giornata = btn.getAttribute("data-g") || null;
+    render();
+  });
+
+  tabCompB.addEventListener("click", function () { switchComp("B"); });
+  tabCompC.addEventListener("click", function () { switchComp("C"); });
+  function switchComp(comp) {
+    state.comp = comp; state.giornata = null;
+    tabCompB.setAttribute("aria-selected", String(comp === "B"));
+    tabCompC.setAttribute("aria-selected", String(comp === "C"));
+    headSubEl.innerHTML = COMP_META[comp].sub;
+    render();
+  }
+
+  tabViewPartite.addEventListener("click", function () { switchView("partite"); });
+  tabViewClassifica.addEventListener("click", function () { switchView("classifica"); });
+  function switchView(view) {
+    state.view = view;
+    tabViewPartite.setAttribute("aria-selected", String(view === "partite"));
+    tabViewClassifica.setAttribute("aria-selected", String(view === "classifica"));
+    render();
+  }
+
+  fetch("risultati.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (d) {
+    docsByComp.B = d.B || [];
+    docsByComp.C = d.C || [];
+    aggiornato = d.aggiornato || "";
+    if (aggiornato) {
+      document.getElementById("footNote").innerHTML += '<br>Dati del ' + aggiornato + '.';
+    }
+    render();
+  }).catch(function () {
+    listEl.innerHTML = '<p class="empty-list">Dati non disponibili al momento. Riprova più tardi.</p>';
+  });
+})();
+</script>
+
+</body>
+</html>
